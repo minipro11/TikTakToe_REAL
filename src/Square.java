@@ -5,19 +5,27 @@ import java.io.File;
 import java.io.IOException;
 
 public class Square {
-    private boolean taken;
-    private boolean tru;
-    public Square (boolean taken, boolean tru) {
-        this.taken = taken;
-        this.tru = tru;
+    private BufferedImage img;
+    private int x;
+    private int y;
+    public Square (int xCord, int yCord, String Img) {
+        x = xCord;
+        y = yCord;
+        try {
+            img = ImageIO.read(new File(Img));
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    public int getX() {
+        return x;
     }
 
-    public boolean isTaken() {
-        return taken;
+    public int getY() {
+        return y;
     }
 
-    public boolean isTru() {
-        return tru;
+    public BufferedImage getImg() {
+        return img;
     }
-
 }
