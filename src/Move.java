@@ -26,4 +26,4 @@ public class Move {
         space = false;
     }
 
-}
+}//

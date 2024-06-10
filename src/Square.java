@@ -28,4 +28,4 @@ public class Square {
     public BufferedImage getImg() {
         return img;
     }
-}
+}//

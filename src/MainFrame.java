@@ -21,4 +21,4 @@ public class MainFrame implements Runnable {
             panel.repaint();  // we don't ever call paintComponent directly
         }
     }
-}
+}//
