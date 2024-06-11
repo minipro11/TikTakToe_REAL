@@ -1,3 +1,4 @@
+
 import javax.swing.*;
 public class MainFrame implements Runnable {
     private GraphicsPanel panel;
@@ -21,4 +22,4 @@ public class MainFrame implements Runnable {
             panel.repaint();  // we don't ever call paintComponent directly
         }
     }
-}//
+}

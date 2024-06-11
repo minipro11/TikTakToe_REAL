@@ -1,3 +1,4 @@
+
 import com.sun.source.doctree.SerialFieldTree;
 
 import javax.imageio.ImageIO;
@@ -12,10 +13,13 @@ import java.util.*;
 
 public class GraphicsPanel extends JPanel implements MouseListener, KeyListener {
     private BufferedImage board;
+    private BufferedImage button;
     private boolean turn = true;
     private boolean circleWin = false;
     private boolean XWin = false;
-    private final ArrayList<Square> list = new ArrayList<>();
+    private boolean again = false;
+    private ArrayList<Square> list = new ArrayList<>();
+    private final ArrayList<Square> reset = new ArrayList<>();
     private final Move box1 = new Move();
     private final Move box2 = new Move();
     private final Move box3 = new Move();
@@ -25,12 +29,13 @@ public class GraphicsPanel extends JPanel implements MouseListener, KeyListener 
     private final Move box7 = new Move();
     private final Move box8 = new Move();
     private final Move box9 = new Move();
-    private Move[] moves = {box1, box2, box3, box4, box5, box6, box7, box8, box9};
+    private final Move[] moves = {box1, box2, box3, box4, box5, box6, box7, box8, box9};
 
 
     public GraphicsPanel() {
         try {
             board = ImageIO.read(new File("src/board.png"));
+            button = ImageIO.read(new File("src/button.png"));
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -54,12 +59,26 @@ public class GraphicsPanel extends JPanel implements MouseListener, KeyListener 
             g.setColor(Color.BLUE);
             g.setFont(new Font("Times New Roman", Font.PLAIN, 100));
             g.drawString("BLUE WINS", 160, 220);
+            g.drawImage(button, 350, 100, null);
+            again = true;
         }
         if (XWin) {
             g.setColor(Color.RED);
             g.setFont(new Font("Times New Roman", Font.PLAIN, 100));
             g.drawString("RED WINS", 190, 220);
+            g.drawImage(button, 350, 100, null);
+            again = true;
         }
+        if (!(box1.canMove() || box2.canMove() || box3.canMove() || box4.canMove() || box5.canMove() || box6.canMove() || box7.canMove() || box8.canMove() || box9.canMove())) {
+            if (!(circleWin || XWin)) {
+                g.setColor(Color.BLACK);
+                g.setFont(new Font("Times New Roman", Font.PLAIN, 100));
+                g.drawString("IT'S A TIE", 210, 220);
+                g.drawImage(button, 350, 100, null);
+                again = true;
+            }
+        }
+
         if (moves[0].getCircle() && moves[1].getCircle() && moves[2].getCircle() || (moves[0].getX() && moves[1].getX() && moves[2].getX())) {
             g.drawLine(140, 330, 700, 330);
         }
@@ -95,6 +114,7 @@ public class GraphicsPanel extends JPanel implements MouseListener, KeyListener 
     }
     @Override
     public void mouseReleased(MouseEvent e) {
+        Square x = null;
         if (e.getButton() == MouseEvent.BUTTON1) {
             Point mouseClickLocation = e.getPoint();
             int col1 = 153;
@@ -105,7 +125,6 @@ public class GraphicsPanel extends JPanel implements MouseListener, KeyListener 
             int row3 = 614;
             if (box1.canMove()) {
                 if (mouseClickLocation.x >= col1 && mouseClickLocation.y >= row1 && mouseClickLocation.x <= col1 + 175 && mouseClickLocation.y <= row1 + 173) {
-                    Square x;
                     if (turn) {
                         x = new Square(150, 250, "src/circle.png");
                         box1.setCircle(true);
@@ -121,7 +140,6 @@ public class GraphicsPanel extends JPanel implements MouseListener, KeyListener 
 
             if (box2.canMove()) {
                 if (mouseClickLocation.x >= col2 && mouseClickLocation.y >= row1 && mouseClickLocation.x <= col2 + 175 && mouseClickLocation.y <= row1 + 173) {
-                    Square x;
                     if (turn) {
                         x = new Square(340, 250, "src/circle.png");
                         box2.setCircle(true);
@@ -137,7 +155,6 @@ public class GraphicsPanel extends JPanel implements MouseListener, KeyListener 
 
             if (box3.canMove()) {
                 if (mouseClickLocation.x >= col3 && mouseClickLocation.y >= row1 && mouseClickLocation.x <= col3 + 175 && mouseClickLocation.y <= row1 + 173) {
-                    Square x;
                     if (turn) {
                         x = new Square(530, 250, "src/circle.png");
                         box3.setCircle(true);
@@ -153,7 +170,6 @@ public class GraphicsPanel extends JPanel implements MouseListener, KeyListener 
 
             if (box4.canMove()) {
                 if (mouseClickLocation.x >= col1 && mouseClickLocation.y >= row2 && mouseClickLocation.x <= col1 + 175 && mouseClickLocation.y <= row2 + 173) {
-                    Square x;
                     if (turn) {
                         x = new Square(150, 436, "src/circle.png");
                         box4.setCircle(true);
@@ -168,7 +184,6 @@ public class GraphicsPanel extends JPanel implements MouseListener, KeyListener 
             }
             if (box5.canMove()) {
                 if (mouseClickLocation.x >= col2 && mouseClickLocation.y >= row2 && mouseClickLocation.x <= col2 + 175 && mouseClickLocation.y <= row2 + 173) {
-                    Square x;
                     if (turn) {
                         x = new Square(340, 436, "src/circle.png");
                         box5.setCircle(true);
@@ -183,7 +198,6 @@ public class GraphicsPanel extends JPanel implements MouseListener, KeyListener 
             }
             if (box6.canMove()) {
                 if (mouseClickLocation.x >= col3 && mouseClickLocation.y >= row2 && mouseClickLocation.x <= col3 + 175 && mouseClickLocation.y <= row2 + 173) {
-                    Square x;
                     if (turn) {
                         x = new Square(530, 436, "src/circle.png");
                         box6.setCircle(true);
@@ -199,7 +213,6 @@ public class GraphicsPanel extends JPanel implements MouseListener, KeyListener 
 
             if (box7.canMove()) {
                 if (mouseClickLocation.x >= col1 && mouseClickLocation.y >= row3 && mouseClickLocation.x <= col1 + 175 && mouseClickLocation.y <= row3 + 173) {
-                    Square x;
                     if (turn) {
                         x = new Square(150, 622, "src/circle.png");
                         box7.setCircle(true);
@@ -214,7 +227,6 @@ public class GraphicsPanel extends JPanel implements MouseListener, KeyListener 
             }
             if (box8.canMove()) {
                 if (mouseClickLocation.x >= col2 && mouseClickLocation.y >= row3 && mouseClickLocation.x <= col2 + 175 && mouseClickLocation.y <= row3 + 173) {
-                    Square x;
                     if (turn) {
                         x = new Square(340, 622, "src/circle.png");
                         box8.setCircle(true);
@@ -229,7 +241,6 @@ public class GraphicsPanel extends JPanel implements MouseListener, KeyListener 
             }
             if (box9.canMove()) {
                 if (mouseClickLocation.x >= col3 && mouseClickLocation.y >= row3 && mouseClickLocation.x <= col3 + 175 && mouseClickLocation.y <= row3 + 173) {
-                    Square x;
                     if (turn) {
                         x = new Square(530, 622, "src/circle.png");
                         box9.setCircle(true);
@@ -242,25 +253,37 @@ public class GraphicsPanel extends JPanel implements MouseListener, KeyListener 
                     box9.moved();
                 }
             }
-            if ((moves[0].getCircle() && moves[1].getCircle() && moves[2].getCircle()) ||
+            circleWin = (moves[0].getCircle() && moves[1].getCircle() && moves[2].getCircle()) ||
                     (moves[3].getCircle() && moves[4].getCircle() && moves[5].getCircle()) ||
                     (moves[6].getCircle() && moves[7].getCircle() && moves[8].getCircle()) ||
                     (moves[0].getCircle() && moves[3].getCircle() && moves[6].getCircle()) ||
                     (moves[1].getCircle() && moves[4].getCircle() && moves[7].getCircle()) ||
                     (moves[2].getCircle() && moves[5].getCircle() && moves[8].getCircle()) ||
                     (moves[0].getCircle() && moves[4].getCircle() && moves[8].getCircle()) ||
-                    (moves[2].getCircle() && moves[4].getCircle() && moves[6].getCircle())) {
-                circleWin = true;
-            }
-            if ((moves[0].getX() && moves[1].getX() && moves[2].getX()) ||
+                    (moves[2].getCircle() && moves[4].getCircle() && moves[6].getCircle());
+
+            XWin = (moves[0].getX() && moves[1].getX() && moves[2].getX()) ||
                     (moves[3].getX() && moves[4].getX() && moves[5].getX()) ||
                     (moves[6].getX() && moves[7].getX() && moves[8].getX()) ||
                     (moves[0].getX() && moves[3].getX() && moves[6].getX()) ||
                     (moves[1].getX() && moves[4].getX() && moves[7].getX()) ||
                     (moves[2].getX() && moves[5].getX() && moves[8].getX()) ||
                     (moves[0].getX() && moves[4].getX() && moves[8].getX()) ||
-                    (moves[2].getX() && moves[4].getX() && moves[6].getX())) {
-                XWin = true;
+                    (moves[2].getX() && moves[4].getX() && moves[6].getX());
+            if (again) {
+                if (mouseClickLocation.getX() >= 350 && mouseClickLocation.getY() >= 100 && mouseClickLocation.getX() <= 500 && mouseClickLocation.getY() <= 148) {
+                    list = reset;
+                    box1.reset();
+                    box2.reset();
+                    box3.reset();
+                    box4.reset();
+                    box5.reset();
+                    box6.reset();
+                    box7.reset();
+                    box8.reset();
+                    box9.reset();
+                    again = false;
+                }
             }
         }
     }
@@ -281,4 +304,4 @@ public class GraphicsPanel extends JPanel implements MouseListener, KeyListener 
     public void keyReleased(KeyEvent e) {
     }
 }
-//
+

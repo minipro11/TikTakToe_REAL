@@ -1,3 +1,4 @@
+
 public class Move {
     private boolean space;
     private boolean circle;
@@ -22,8 +23,14 @@ public class Move {
         X = x;
     }
 
+    public void reset() {
+        space = true;
+        circle = false;
+        X = false;
+    }
+
     public void moved() {
         space = false;
     }
 
-}//
+}
